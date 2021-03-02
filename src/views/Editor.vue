@@ -1,44 +1,49 @@
 <template>
-  <el-container @keydown.ctrl.83.native="(e)=>{submitCtl(e)}">
-    <el-header class="cvHeader">
-      Markdown Editor
-    </el-header>
-    <el-main>
-      <el-row>
-        <el-radio-group v-model="radio1">
-          <el-radio-button label="默认模板"></el-radio-button>
-          <el-radio-button label="简历模板"></el-radio-button>
-        </el-radio-group>
-        <el-button-group class="marginLeft15">
-<!--          <el-button type="primary">上传<i class="el-icon-upload el-icon&#45;&#45;right"></i></el-button>-->
-          <el-button title="保存" type="primary" icon="el-icon-document-checked" circle @click="submit"></el-button>
-        </el-button-group>
+  <el-row @keydown.ctrl.83.native="(e)=>{submitCtl(e)}">
+    <el-row class="header">
+      <el-col :span="12">
         <el-upload
-          class="marginTop15 width200"
+          class="upload"
           action="https://jsonplaceholder.typicode.com/posts/"
           ref="upload"
           :on-change="handleChange"
           :limit="fileLimit"
           :on-exceed="handleExceed"
           :auto-upload="false"
-          :show-file-list="true">
+          :show-file-list="false">
           <el-button slot="trigger" size="small" type="primary">选取MD文件</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传MD文件</div>
+          <span slot="tip" class="el-upload__tip">只能上传MD文件
+            <span v-show="last_filename ? true:false">
+              （<span style="color: red">{{last_filename}}</span>）
+            </span>
+          </span>
         </el-upload>
-      </el-row>
+      </el-col>
+      <el-col :span="12" class="headerRight">
+        <el-radio-group v-model="radio1">
+          <el-radio-button label="默认模板"></el-radio-button>
+          <el-radio-button label="简历模板"></el-radio-button>
+        </el-radio-group>
+        <el-button-group class="marginLeft15">
+          <!--          <el-button type="primary">上传<i class="el-icon-upload el-icon&#45;&#45;right"></i></el-button>-->
+          <el-button title="保存" type="primary" icon="el-icon-document-checked" circle @click="submit"></el-button>
+        </el-button-group>
+      </el-col>
+    </el-row>
+    <el-row>
 
       <mavon-editor
         v-model="content"
         ref="md"
         @change="change"
-        style="min-height: 600px;max-height: 900px"
+        style="height: 800px;"
         @imgAdd="$imgAdd"
         :toolbars="configs"
         class="marginTop15"
       />
 
-    </el-main>
-  </el-container>
+    </el-row>
+  </el-row>
 </template>
 
 <script>
@@ -56,6 +61,7 @@ export default {
   props: ['fmarkdownOption'],
   data: function () {
     return {
+      last_filename: '',
       fileLimit: 1,
       radio1: '默认模板',
       defaultContent: '',
@@ -224,6 +230,8 @@ export default {
       reader.onload = function (e) {
         _this.content = e.target.result
       }
+      // console.log(file.name)
+      _this.last_filename = file.name
     },
     handleExceed (files, fileList) {
       console.log(`当前限制选择 ${this.fileLimit} 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
@@ -294,5 +302,26 @@ export default {
   font-weight: bold;
   color: black;
   font-size: 20px;
+}
+.el-upload-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  width: 400px;
+}
+.header{
+  height: 70px;
+}
+.headerRight{
+  line-height: 70px;
+  text-align: right;
+  padding-right: 30px;
+}
+.upload{
+  margin-left: 30px;
+  margin-top: 15px;
+}
+.el-upload__tip{
+  margin-left: 10px;
 }
 </style>

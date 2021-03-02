@@ -19,7 +19,8 @@ import {
   RadioButton,
   RadioGroup,
   Row,
-  Upload
+  Upload,
+  Col
 } from 'element-ui'
 
 // npm i mint-ui -S
@@ -43,6 +44,7 @@ Vue.use(Radio)
 Vue.use(RadioButton)
 Vue.use(RadioGroup)
 Vue.use(Row)
+Vue.use(Col)
 Vue.use(Upload)
 
 /* eslint-disable no-new */
